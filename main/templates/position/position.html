@@ -1,0 +1,28 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+    <h1>Должность</h1>
+    <hr>
+    <a class="btn btn-primary" href="{% url 'create_position' %}">Добавить группу</a>
+    <br>
+
+    <br>
+
+<table class="table table-striped">
+<tr>
+    <th>Должность</th>
+    <th>Оклад</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
+
+</tr>
+        {% for position in position %}
+        <tr>
+        <td>{{ position.name }}</td>
+        <td>{{ position.salary }}</td>
+         <td><a href="{% url 'update_position' position.id %}">Изменить</a> </td>
+         <td><a href="{% url 'delete_position' position.id %}">Удалить</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+            {% endblock content %}

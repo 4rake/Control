@@ -1,0 +1,27 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+    <h1>Дисциплина</h1>
+    <hr>
+        <a class="btn btn-primary" href="{% url 'create_discipline' %}">Добавить данные</a>
+        <br>
+    <br>
+
+<table class="table table-striped">
+<tr>
+    <th>Название дисциплины</th>
+    <th>Описание</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
+
+</tr>
+        {% for discipline in discipline %}
+        <tr>
+        <td>{{ discipline.name }}</td>
+        <td>{{ discipline.description }}</td>
+
+        <td><a href="{% url 'update_discipline' discipline.id %}">Изменить</a> </td>
+        <td><a href="{% url 'delete_discipline' discipline.id %}">Удалить</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+            {% endblock content %}

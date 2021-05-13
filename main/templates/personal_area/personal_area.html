@@ -1,0 +1,118 @@
+{% extends 'main/layout.html' %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+      </div>
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-img">
+
+<style>
+img {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 250px;
+    height: 250px;
+    max-height: 250px;
+    min-width: 250px;
+}
+
+</style>
+
+                            <img class="polaroid" src="{{ request.user.userprofile.image.url }}" alt=""/>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h5>
+                                        {{ request.user.userprofile.surname }}
+                                        {{ request.user.userprofile.name }}
+                                        {{ request.user.userprofile.middle_name }}
+                                    </h5>
+                                    <h6>
+                                        {{ request.user.userprofile.description }}
+                                    </h6>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="col-md-8">
+                        <div class="tab-content profile-tab" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Имя пользвоателя</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {{ request.user.username }}
+
+                                        </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Доступ</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {{ request.user.userprofile.fk_accses }}
+                                                 </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>ФИО</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {{ request.user.userprofile.surname }}
+                                        {{ request.user.userprofile.name }}
+                                        {{ request.user.userprofile.middle_name }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Email</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {{ request.user.email }}
+                                        </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Описание</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {{ request.user.userprofile.description }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Должность</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {{ request.user.userprofile.fk_position }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Дисциплины</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p> {{ request.user.userprofile.fk_discipline }}
+                                                </p>
+                                            </div>
+                                        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+{% endblock content %}

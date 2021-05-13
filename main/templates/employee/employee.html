@@ -1,0 +1,27 @@
+{% extends 'main/layout.html' %}
+
+
+
+{% block content %}
+    <h1>Сотрудники</h1>
+<! -- <a href="{% url 'create_employee' %}"></a>
+
+
+<table>
+<tr>
+
+    <th>Имя сотрудника</th>
+    <th>Фамилия сотрудника</th>
+
+
+</tr>
+        {% for user_profile in user_profile %}
+        <tr>
+
+        <td>{{ user.userprofile.name }}</td>
+        <td>{{ user.last_name }}</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+            {% endblock content %}

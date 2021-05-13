@@ -1,0 +1,50 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+{% load crispy_forms_tags %}
+    <h1>Студенты</h1>
+
+    <div class="row">
+        <div class="col">
+            <div class="card card-body">
+                <div style='text-align:left; '>
+                <form method="get">
+                    {{ myFilter.form.as_p }}
+                    <hr>
+                <button class="btn btn-primary" type="submit">Поиск</button>
+
+</form>
+            </div>
+                </div>
+                    </div>
+                        </div>
+    <br>
+    <a class="btn btn-primary" href="{% url 'cr_st' %}">Добавить данные</a>
+    <hr>
+<table class="table table-striped">
+<tr>
+    <th>Фамилия</th>
+    <th>Имя</th>
+    <th>Отчество</th>
+    <th>Дата рождения</th>
+    <th>Курс</th>
+    <th>Номер билета</th>
+    <th>Группа</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
+</tr>
+        {% for student in myFilter.qs %}
+        <tr>
+        <td>{{ student.surname }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.middle_name }}</td>
+        <td>{{ student.date_of_birth }}</td>
+        <td>{{ student.course }}</td>
+        <td>{{ student.number }}</td>
+        <td>{{ student.group }}</td>
+        <td><a href="{% url 'update_student' student.id %}">Изменить</a> </td>
+        <td><a href="{% url 'delete_student' student.id %}">Удалить</a> </td>
+        </tr>
+
+        {% endfor %}
+    </table>
+            {% endblock content %}

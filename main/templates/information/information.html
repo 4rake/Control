@@ -1,0 +1,28 @@
+{% extends 'main/layout.html' %}
+
+
+
+{% block content %}
+    <h1>Информаиция</h1>
+     <hr>
+    <a class="btn btn-primary" href="{% url 'create_information' %}">Добавить данные</a>
+    <br>
+    <br>
+<table class="table table-striped"><tr>
+<tr>
+    <th>Заголвок</th>
+    <th>Описание</th>
+    <th>Картинка</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
+</tr>
+        {% for information in information %}
+        <tr>
+        <td>{{ information.title }}</td>
+        <td>{{ information.description }}</td>
+        <td>{{ information.image }}</td>
+         <td><a href="{% url 'update_information' information.id %}">Изменить</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}

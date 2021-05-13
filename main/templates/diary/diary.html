@@ -1,0 +1,21 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+    <h1>Дневник</h1>
+
+<table class="table table-striped">
+<tr>
+    <th>Преподаватель</th>
+    <th>Группа</th>
+    <th>Студенты</th>
+    <th>Дисциплины</th>
+    <th>Оценки</th>
+
+</tr>
+        {% for diary in diary %}
+        <tr>
+
+        </tr>
+
+        {% endfor %}
+    </table>
+            {% endblock content %}

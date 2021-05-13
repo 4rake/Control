@@ -1,0 +1,28 @@
+{% extends 'main/layout.html' %}
+
+{% block content %}
+    <h1>Группы</h1>
+    <hr>
+    <a class="btn btn-primary" href="{% url 'create_group_name' %}">Добавить группу</a>     <a href="{% url 'export-excel' %}" class="btn btn-primary">Экспорт данных</a>
+    <br>
+
+    <br>
+
+<table class="table table-striped">
+<tr>
+     <th>Название группы</th>
+    <th>Описание</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
+
+</tr>
+        {% for group_name in group_name %}
+        <tr>
+        <td>{{ group_name.name }}</td>
+        <td>{{ group_name.description }}</td>
+         <td><a href="{% url 'update_group_name' group_name.id %}">Изменить</a> </td>
+         <td><a href="{% url 'delete_group_name' group_name.id %}">Удалить</a> </td>
+        </tr>
+        {% endfor %}
+    </table>
+            {% endblock content %}

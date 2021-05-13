@@ -1,0 +1,33 @@
+{% extends 'main/layout.html' %}
+
+
+
+{% block content %}
+    <h1>Домашняя работа</h1>
+    <hr>
+    <a class="btn btn-primary" href="{% url 'create_homework' %}">Добавить данные</a>
+    <br>
+    <br>
+<table class="table table-striped">
+<tr>
+     <th>Заголовок</th>
+    <th>Описание работы</th>
+    <th>Дата назначения работы</th>
+    <th>Дата сдачи работы</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
+
+</tr>
+        {% for homework in homework %}
+        <tr>
+        <td>{{ homework.title }}</td>
+        <td>{{ homework.description }}</td>
+        <td>{{ homework.date_of_deliviri }}</td>
+        <td>{{ homework.appointment_date }}</td>
+         <td><a href="{% url 'update_homework' homework.id %}">Изменить</a> </td>
+         <td><a href="{% url 'delete_homework' homework.id %}">Удалить</a> </td>
+
+        </tr>
+        {% endfor %}
+    </table>
+            {% endblock content %}

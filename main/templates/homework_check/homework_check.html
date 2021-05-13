@@ -1,0 +1,33 @@
+{% extends 'main/layout.html' %}
+
+
+
+{% block content %}
+    <h1>Проверка домашней работы</h1>
+    <hr>
+    <a class="btn btn-primary" href="{% url 'create_homework_check' %}">Добавить данные</a>
+    <br>
+    <br>
+<table class="table table-striped">
+<tr>
+    <th>Оценка</th>
+    <th>Преподаватель</th>
+    <th>Домашняя работа</th>
+    <th>Студент</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
+
+</tr>
+        {% for homework_check in homework_check %}
+        <tr>
+        <td>{{ homework_check.assessment }}</td>
+        <td>{{ homework_check.fk_employee.name }}</td>
+        <td>{{ homework_check.fk_homework }}</td>
+        <td> {% for student in homework_check.fk_student.all %} {{ student.name }} {% endfor %}</td>
+         <td><a href="{% url 'update_homework_check' homework_check.id %}">Изменить</a> </td>
+         <td><a href="{% url 'delete_homework_check' homework_check.id %}">Удалить</a> </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+            {% endblock content %}
