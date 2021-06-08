@@ -1,0 +1,26 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+{% for news in news %}
+<form method="POST" enctype="multipart/form-data">
+<div class="card text-center">
+  <div class="card-header">
+        <h5 class="card-text">Название новости</h5>
+    <h6 class="card-text">{{news.title}}</h6>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Пост</h5>
+    <h6>
+    {{news.post|safe|linebreaks}}</h6>
+    <h5 class="card-title">Изобравжение</h5>
+    <h6>
+    {{ news.image }}</h6>
+
+  </div>
+  <div class="card-footer text-muted">
+    <h5 class="card-text">Дата публикации</h5>
+    <h6>Опубликовано:{{news.date|date:"Y-m-d в H:i:s"}}</h6>
+  </div>
+</div>
+</form>
+{% endfor %}
+{% endblock content %}

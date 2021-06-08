@@ -4,7 +4,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.conf.urls.i18n import i18n_patterns
-
+from django.views.generic import ListView, DetailView
+from main.models import *
 
 urlpatterns = [
     path('', views.index, name='home'),
@@ -20,18 +21,25 @@ urlpatterns = [
     path('update_student/<str:pk>/', views.update_student, name='update_student'),
     path('delete_student/<str:pk>/', views.delete_student, name='delete_student'),
 
-    path('diary/<str:pk>/', views.diary, name='diary'),
+    path('diary', views.diary, name='diary'),
+    path('create_diary', views.create_diary, name='create_diary'),
+    path('update_diary/<str:pk>/', views.update_diary, name='update_diary'),
+    path('delete_diary/<str:pk>/', views.delete_diary, name='delete_diary'),
 
     path('personal_area', views.personal_area, name='personal_area'),
 
+    path('news', views.news, name='news'),
+    path('post', views.post, name='post'),
+
+    path('create_posts', views.create_posts, name='create_posts'),
+    path('update_posts/<str:pk>/', views.update_posts, name='update_posts'),
+    path('delete_posts/<str:pk>/', views.delete_posts, name='delete_posts'),
     path('distribution', views.distribution, name='distribution'),
     path('distribution/<str:pk>/', views.distribution, name='distribution'),
     path('create_distribution', views.create_distribution, name='create_distribution'),
     path('update_distribution/<str:pk>/', views.update_distribution, name='update_distribution'),
     path('delete_distribution/<str:pk>/', views.delete_distribution, name='delete_distribution'),
-
     path('user_profile', views.user_profiile, name='user_profile'),
-
     path('create_employee', views.create_employee, name='create_employee'),
     path('update_employee/<str:pk>/', views.update_employee, name='update_employee'),
     path('delete_employee/<str:pk>/', views.delete_employee, name='delete_employee'),
@@ -45,21 +53,30 @@ urlpatterns = [
     path('create_group_name', views.create_group_name, name='create_group_name'),
 
     path('homework', views.homework, name='homework'),
+    path('homework_student', views.homework_student, name='homework_student'),
+
     path('create_homework', views.create_homework, name='create_homework'),
     path('update_homework/<str:pk>/', views.update_homework, name='update_homework'),
     path('delete_homework/<str:pk>/', views.delete_homework, name='delete_homework'),
-    path('update_group_name/<str:pk>/', views.update_group_name, name='update_group_name'),
+    path('update_group_name/<int:pk>/', views.update_group_name, name='update_group_name'),
     path('delete_group_name/<str:pk>/', views.delete_group_name, name='delete_group_name'),
 
     path('homework_check', views.homework_check, name='homework_check'),
-    path('create_homework_check', views.create_homework_check, name='create_homework_check'),
-    path('update_homework_check/<str:pk>/', views.update_homework_check, name='update_homework_check'),
+    path('create_homework_check', views.HomeworkCheckCreate.as_view(), name='create_homework_check'),
+    #path('create_homework_check', views.create_homework_check, name='create_homework_check'),
+    path('update_homework_check/<int:pk>/', views.update_homework_check, name='update_homework_check'),
     path('delete_homework_check/<str:pk>/', views.delete_homework_check, name='delete_homework_check'),
 
-   # path('information', views.information, name='information'),
+    #path('information', views.information, name='information'),
     #path('create_information', views.create_information, name='create_information'),
     #path('update_information/<str:pk>/', views.update_information, name='update_information'),
     #path('delete_information/<str:pk>/', views.delete_information, name='delete_information '),
+
+   # path('homework/<int:product_id>', homework_detail, name = 'homework_url'),
+    #path('homework/<int:homework_id>/update', Homework_Update.as_view(),
+                                                 #name = 'update_homework_url'),
+    #path('homework/<int:homework_id>/delete', Homework_Delete.as_view(),
+    #                                             name = 'delete_homework_url'),
 
 
 
@@ -83,7 +100,7 @@ urlpatterns = [
     path('export_excel', views.export_excel, name="export-excel"),
     path('export_excel_attendance', views.export_excel_attendance, name="export_excel-attendance"),
 
-    path('export_pdf', views.export_pdf, name="export-pdf"),
+    #path('export_pdf', views.export_pdf, name="export-pdf"),
 
     path('attendance', views.attendance, name='attendance'),
     path('create_attendance', views.create_attendance, name='create_attendance'),
@@ -96,9 +113,19 @@ urlpatterns = [
 
     path('contact', views.contact, name='contact'),
 
-
+    path('News/<int:pk>',
+    ListView.as_view(queryset=News.objects.all().order_by("-date")[:20],
+    template_name="news/posts.html")),
+    path('News/<int:pk>',
+    DetailView.as_view(model=News,
+    template_name="news/post.html"),name='post'),
+    path('Homework/<int:pk>',
+    ListView.as_view(queryset=Homework.objects.all(),
+    template_name="homework/homework_student.html")),
+    path('Homework/<int:pk>',
+    DetailView.as_view(model=Homework,
+    template_name="homework/homework_student.html"), name='homework_url'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

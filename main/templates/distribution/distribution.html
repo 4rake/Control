@@ -5,6 +5,7 @@
     <a class="btn btn-primary" href="{% url 'create_distribution' %}">Добавить данные</a>
     <br>
     <br>
+<div class="table-responsive">
 <table class="table table-striped">
 <tr>
     <th>Название дисциплины</th>
@@ -15,7 +16,7 @@
 </tr>
         {% for distribution in distribution %}
         <tr>
-        <th>{% if distribution.fk_employee.first_name %}
+        {% if distribution.fk_employee.first_name %}
 
             {{ distribution.fk_employee.first_name }}
             {{ distribution.fk_employee.last_name }}
@@ -24,7 +25,7 @@
             {% else %}
             {{ distribution.fk_discipline.user.username }}
         {% endif %}
-</th>
+
         <td>{{ distribution.fk_discipline }}</td>
         <td>{{ distribution.fk_employee }}</td>
         <td>{{ distribution.fk_group_name }}</td>
@@ -33,4 +34,5 @@
         </tr>
         {% endfor %}
     </table>
+</div>
             {% endblock content %}

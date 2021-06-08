@@ -1,47 +1,104 @@
-{% extends 'main/layout.html' %}
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="http://127.0.0.1:8000/">Контроль</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+    <div class="navbar-collapse collapse" id="navbarCollapse">
+<ul class="navbar-nav me-auto mb-2 mb-md-0">
+    {% if request.user.is_authenticated%}
+    {% if request.user.userprofile.fk_position_id == 1%}
 
-{% block content %}
-
-<style type="text/css">
-  .create-form {
-	    width: 100%;
-	    max-width: 100%;
-	    padding: 15px;
-	    margin: auto;
-  	}
-  	.submit-button{
-  		max-width: 200px;
-  	}
-</style>
-
-<div class="container">
-	<div class="row">
-		<div class="col-lg-7 offset-lg-1">
-			<form class="create-form" method="post" enctype="multipart/form-data">{% csrf_token %}
-
-				<!-- title -->
-				<div class="form-group">
-					<label for="id_title">Title</label>
-					<input class="form-control" type="text" name="title" id="id_title" placeholder="Title" required autofocus>
-				</div>
-
-				<!-- Body -->
-				<div class="form-group">
-					<label for="id_body">Content</label>
-					<textarea class="form-control" rows="10" type="text" name="body" id="id_body" placeholder="This blog is about..." required></textarea>
-				</div>
-
-				<!-- Image -->
-				<div class="form-group">
-					<label for="id_image">Image</label>
-					<input  type="file" name="image" id="id_image" accept="image/*" required>
-				</div>
-
-				<!-- Submit btn -->
-				<button class="submit-button btn btn-lg btn-primary btn-block" type="submit">POST</button>
-			</form>
-		</div>
-	</div>
-</div>
-
-{% endblock content %}
+ <li class="nav-item">
+     <a class="nav-link active" aria-current="page" href="{% url 'student' %}">Студенты</a>
+ </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'position' %}">Должности</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'personal_area' %}">Личный кабинет</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'group_name' %}">Группы</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'homework' %}">Домашная работа</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page"  href="{% url 'homework_check' %}">Проверка домашней работы</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'discipline' %}">Дисциплины</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'distribution' %}">Распределение сотрудников</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'attendance' %}">Посещаемость</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'diary' request.user.id %}">Дневник</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'news' %}">Новости</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page">Привет,  {{ request.user.username }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'logoutUser' %}">Выход</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'student' %}">Студенты</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'position' %}">Должности</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'personal_area' %}">Личный кабинет</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'group_name' %}">Группы</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'homework' %}">Домашная работа</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page"  href="{% url 'homework_check' %}">Проверка домашней работы</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'discipline' %}">Дисциплины</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'distribution' %}">Распределение сотрудников</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'attendance' %}">Посещаемость</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'diary' request.user.id %}">Дневник</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'news' %}">Новости</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page">Привет,  {{ request.user.username }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{% url 'logoutUser' %}">Выход</a>
+    </li>
+    {% endif %}
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link active" href="registerPage">Зарегестрироваться</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="loginPage">Войти</a>
+    </li>
+    {% endif %}
+</ul>
+        <img class="rounded-circle" width="50" height="50" src="{{ request.user.userprofile.image.url }}">
+    </div>
+    </div>
+</nav>

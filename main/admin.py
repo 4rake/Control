@@ -30,9 +30,9 @@ class PositionAdmin(admin.ModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    fields = ('name', 'surname', 'middle_name', 'date_of_birth', 'number', 'group', )
-    list_display = ('name', 'surname', 'middle_name', 'date_of_birth', 'number', 'group', )
-    list_filter = ('name', 'surname', 'middle_name', 'date_of_birth', 'number', 'group', )
+    fields = ('user', 'name', 'surname', 'middle_name', 'date_of_birth', 'number', 'group', )
+    list_display = ('user','name', 'surname', 'middle_name', 'date_of_birth', 'number', 'group', )
+    list_filter = ('user','name', 'surname', 'middle_name', 'date_of_birth', 'number', 'group', )
 
 
 @admin.register(Diary)
@@ -56,9 +56,9 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 @admin.register(Homework)
 class HomeworkAdmin(admin.ModelAdmin):
-    fields = ('title', 'description', 'file', 'date_of_deliviri', 'appointment_date', 'fk_group', )
-    list_display = ('title', 'description', 'file', 'date_of_deliviri', 'appointment_date', )
-    list_filter = ('title', 'description', 'file', 'date_of_deliviri', 'appointment_date', )
+    fields = ('fk_employee', 'title', 'description','presence', 'file', 'date_of_deliviri', 'appointment_date', 'fk_group', )
+    list_display = ('title', 'description', 'presence','file', 'date_of_deliviri', 'appointment_date', )
+    list_filter = ('title', 'description', 'presence', 'file', 'date_of_deliviri', 'appointment_date', )
 
 @admin.register(Homework_check)
 class Homework_checkAdmin(admin.ModelAdmin):
@@ -77,3 +77,9 @@ admin.site.register(User, UserAdmin)
 
 
 resource_class = StudentResource
+
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    fields = ('title', 'post','image', 'date', )
+    list_display = ('title', 'post','image', 'date', )
+    list_filter = ('title', 'post','image', 'date', )

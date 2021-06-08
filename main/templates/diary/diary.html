@@ -1,38 +1,44 @@
 {% extends 'main/layout.html' %}
 {% block content %}
+
     <h1>Дневник</h1>
     <hr>
+    <a class="btn btn-primary" href="{% url 'create_diary' %}">Добавить данные</a>
     <br>
-
     <br>
-
+<div class="table-responsive">
 <table class="table table-striped">
+<tr>
     <th>Преподаватель</th>
     <th>Студенты</th>
     <th>Название дз</th>
     <th>Оценки</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
 
-</tr>
-   <tr>
-        {% for homework_check in homework_check %}
+   <tr/>
+        {% for diary in diary %}
 
-<th>{% if homework_check.fk_employee.first_name %}
+<tr>
+    {% if diary.fk_employee.first_name %}
 
-            {{ homework_check.fk_employee.first_name }}
-            {{ homework_check.fk_employee.last_name }}
+            {{ diary.fk_employee.first_name }}
+            {{ diary.fk_employee.last_name }}
 
-            {{ homework_check.fk_employee.lastname }}
+            {{ diary.fk_employee.lastname }}
             {% else %}
-            {{ homework_check.fk_homework.user.username }}
+            {{ diary.fk_homework.user.username }}
         {% endif %}
-</th>
-            <th>{{ homework_check.fk_student.all|join:", " }}</th>
-            <th>{{ homework_check.fk_homework|join:", " }}</th>
-             <th>{{ homework_check.assessment|join:", " }}</th>
-
+</tr>
+            <td>{{ diary.fk_student.all|join:", " }}</td>
+            <td>{{ diary.fk_homework|join:", " }}</td>
+             <td>{{ diary.assessment|join:", " }}</td>
+            <td><a href="{% url 'update_diary' diary.id %}">Изменить</a> </td>
+            <td><a href="{% url 'delete_diary' diary.id %}">Удалить</a> </td>
 
   </tr>
         {% endfor %}
 
     </table>
+</div>
             {% endblock content %}

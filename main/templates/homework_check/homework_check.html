@@ -8,10 +8,11 @@
     <a class="btn btn-primary" href="{% url 'create_homework_check' %}">Добавить данные</a>
     <br>
     <br>
+<div class="table-responsive">
 <table class="table table-striped">
 <tr>
     <th>Оценка</th>
-    <th>Преподаватель</th>
+    <th></th>
     <th>Домашняя работа</th>
     <th>Студент</th>
     <th>Изменение данных</th>
@@ -41,4 +42,5 @@
         {% endfor %}
 
     </table>
+</div>
             {% endblock content %}

@@ -19,18 +19,25 @@ from django.views import View
 from django.db.models import Q
 from .filters import *
 import xlwt
+from .utils import *
 from django.core.mail import send_mail
 from django.contrib.admin.models import LogEntry
-
 from django.template.loader import render_to_string
-from weasyprint import HTML
+#from weasyprint import HTML
 import tempfile
 from django.db.models import Sum
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from django.http import HttpResponse
+from django.http import HttpResponseServerError
 
+
+def my_test_500_view(request):
+        # Return an "Internal Server Error" 500 response code.
+        return HttpResponseServerError(request,'500.html')
+
+def error_404_view(request):
+    return render(request,'404.html')
 
 def index(request):
     data = {
@@ -61,43 +68,65 @@ def export_excel(request):
     wb.save(response)
     return response
 
-def export_pdf(request):
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; attachment; filename=Group_name' + \
-        str(datetime.now()) + '.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
+#def export_pdf(request):
+#    response = HttpResponse(content_type='application/pdf')
+#    response['Content-Disposition'] = 'inline; attachment; filename=Group_name' + \
+#        str(datetime.now()) + '.pdf'
+#    response['Content-Transfer-Encoding'] = 'binary'
 
     #sum = group_name.aggregate(Sum('amount'))
 
-    html_string = render_to_string(
-        'group_name/pdf-output.html', {'group_name': [], 'total': 0})
-    html = HTML(string=html_string)
+#    html_string = render_to_string(
+#        'group_name/pdf-output.html', {'group_name': [], 'total': 0})
+#    html = HTML(string=html_string)
 
-    result = html.write_pdf()
+#    result = html.write_pdf()
 
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(result)
-        output.flush()
-        output = open(output.name, 'rb')
-        response.write(output.read())
+#    with tempfile.NamedTemporaryFile(delete=True) as output:
+#        output.write(result)
+#        output.flush()
+#        output = open(output.name, 'rb')
+#        response.write(output.read())
+#
+#    return response
 
-    return response
 
+def diary(request):
+    diary = Diary.objects.all()
 
-def diary(request, pk):
-    homework_check = Homework_check.objects.filter(Q(fk_employee=pk))
+    return render(request, "diary/diary.html", {"diary": diary})
 
-    return render(request, "diary/diary.html", {"homework_check": homework_check})
+def create_diary(request):
+    form = DiaryForm()
+    if request.method == 'POST':
+        form = DiaryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('diary')
+    context = {'form':form}
+    return render(request, 'diary/create_diary.html', context)
 
-#def create_diary(request):
-    #form = DiaryForm()
-    #if request.method == 'POST':
-    #    form = DiaryForm(request.POST)
-    #    if form.is_valid():
-    #        form.save()
-    #        return redirect('diary')
-    #context = {'form':form}
-    #return render(request, 'diary/create_diary.html', context)
+def update_diary(request, pk):
+    diary = Diary.objects.get(id=pk)
+
+    form = DiaryForma(instance=diary)
+
+    if request.method == 'POST':
+        form = DiaryForm(request.POST, instance=diary)
+        if form.is_valid():
+            form.save()
+            return redirect('diary')
+    context = {'form': form}
+
+    return render(request, 'diary/update_diary.html', context)
+
+def delete_diary(request, pk):
+    diary = Diary.objects.get(id=pk)
+    if request.method == "POST":
+        diary.delete()
+        return redirect('diary')
+    return render(request, 'diary/delete_diary.html')
+
 
 def about(request):
     return render(request, "main/about.html")
@@ -206,30 +235,47 @@ def create_group_name(request):
     return render(request, 'group_name/create_group_name.html', context)
 
 def homework(request):
-    homework = Homework.objects.all()
+    homework = Homework.objects.filter(fk_employee=request.user.userprofile)
     return render(request, "homework/homework.html", {"homework": homework})
 
+def homework_student(request):
+    homework = Homework.objects.filter(fk_group=request.user.student.group)
+    return render(request, "homework/homework_student.html", {"homework": homework})
+
 def create_homework(request):
-    form = HomeworkForm()
+    form = HomeworkForm(request.POST or None, request.FILES or None)
     if request.method == 'POST':
         form = HomeworkForm(request.POST)
         if form.is_valid():
-
             form.save()
             return redirect('homework')
     context = {'form':form}
 
     return render(request, 'homework/create_homework.html', context)
 
+
 def homework_check(request):
-    homework_check = Homework_check.objects.all()
-    return render(request, "homework_check/homework_check.html", {"homework_check": homework_check})
+    _homework_check = Homework_check.objects.all()
+    return render(request, "homework_check/homework_check.html", {"homework_check": _homework_check})
+
+
+class HomeworkCheckCreate(View, ObjCreateMixin):
+    model_form = Homework_checkForm
+    data = Homework_check
+    template = 'homework_check/create_homework_check.html'
+
+    def get(self, request):
+        form = self.model_form(initial={'fk_employee':request.user})
+        return render(request, self.template, context={'form': form})
 
 def create_homework_check(request):
     form = Homework_checkForm()
+    if request.method == 'GET':
+        form = Homework_checkForm(initial={'fk_employee':request.user})
     if request.method == 'POST':
-        form = Homework_checkForm(request.POST)
+        form = Homework_checkForm(request.POST, initial={'fk_employee': request.user})
         if form.is_valid():
+
             form.save()
             return redirect('homework_check')
     context = {'form':form}
@@ -286,7 +332,7 @@ def update_homework(request, pk):
 
     homework = Homework.objects.get(id=pk)
 
-    form = HomeworkForm(instance=homework)
+    form = HomeworkForm(request.FILES or None, instance=homework)
 
     if request.method == 'POST':
         form = HomeworkForm(request.POST, instance=homework)
@@ -442,7 +488,7 @@ def loginPage(request):
                 login(request, user)
                 return redirect('home')
             else:
-                messages.info(request, 'Username OR password is incorrect')
+                messages.info(request, 'Неверное имя пользователя или пароль!')
 
         context = {}
         return render(request, 'accounts/login.html', context)
@@ -540,3 +586,48 @@ def export_excel_attendance(request):
             ws.write(row_num, col_num, str(row[col_num]), font_style)
     wb.save(response)
     return response
+
+def news(request):
+    form = NewsForm(request.POST, request.FILES)
+    news = News.objects.all()
+    context = {'form': form}
+    return render(request, "news/posts.html", {"news": news})
+
+def post(request):
+    form = NewsForm(request.POST, request.FILES)
+    news = News.objects.all()
+    context = {'form': form}
+    return render(request, "news/post.html", {"news": news})
+
+def create_posts(request):
+    form = NewsForm()
+    if request.method == 'POST':
+        form = NewsForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('news')
+    context = {'form':form}
+    return render(request, 'news/create_posts.html', context)
+
+
+def update_posts(request, pk):
+    news = News.objects.get(id=pk)
+
+    form = NewsForm(instance=news)
+
+    if request.method == 'POST':
+        form = NewsForm(request.POST, instance=news)
+        if form.is_valid():
+            form.save()
+            return redirect('news')
+    context = {'form': form}
+
+    return render(request, 'news/update_posts.html', context)
+
+
+def delete_posts(request, pk):
+    news = News.objects.get(id=pk)
+    if request.method == "POST":
+        news.delete()
+        return redirect('news')
+    return render(request, 'news/delete_posts.html')

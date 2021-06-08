@@ -9,11 +9,23 @@ from django.contrib.admin import widgets
 
 from snowpenguin.django.recaptcha3.fields import ReCaptchaField
 
+class ReviewForm(forms.ModelForm):
+    """Форма отзывов"""
+    captcha = ReCaptchaField()
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+class TimeInput(forms.TimeInput):
+    input_type = 'time'
+
 class StudentForm(ModelForm):
     class Meta:
         model = Student
         fields = ('name', 'surname', 'middle_name', 'date_of_birth', 'number', 'group',)
-
+        widgets = {
+            'date_of_birth': DateInput,
+        }
 
 class UserProfileForm(ModelForm):
     class Meta:
@@ -24,7 +36,7 @@ class UserProfileForm(ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'surname': forms.TextInput(attrs={'class': 'form-control'}),
             'middle_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'date_of_birth': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_of_birth': DateInput,
             'description': forms.TextInput(attrs={'class': 'form-control'}),
             'image': forms.TextInput(attrs={'class': 'form-control'}),
             'fk_position': forms.Select(attrs={'class': 'form-control'}),
@@ -53,21 +65,28 @@ class DistributionForm(ModelForm):
 class HomeworkForm(ModelForm):
     class Meta:
         model = Homework
-        fields = ('title', 'description', 'date_of_deliviri', 'appointment_date', 'fk_group')
-
+        fields = ('title', 'description','presence', 'file', 'date_of_deliviri', 'appointment_date', 'fk_employee', 'fk_group')
+        widgets = {
+            'date_of_deliviri': DateInput,
+            'appointment_date': DateInput,
+        }
 
 
 class AttendanceForm(ModelForm):
     class Meta:
         model = Attendance
         fields = ('fk_student', 'fk_discipline', 'date_of_visit', 'presence')
-
+        widgets = {
+            'date_of_visit': DateInput,
+        }
 
 class Homework_checkForm(ModelForm):
     class Meta:
         model = Homework_check
-        fields = ('assessment', 'fk_employee', 'fk_homework', 'fk_student')
-
+        fields = ('assessment', 'fk_employee' , 'fk_homework', 'fk_student')
+        widgets = {
+            'fk_employee':  forms.HiddenInput(attrs={'class':'form-control'})
+        }
 
 class DisciplineForm(ModelForm):
     captcha = ReCaptchaField()
@@ -90,5 +109,15 @@ class CreateUserForm(UserCreationForm):
 
 
 class ContactForm(forms.Form):
+
     subject = forms.CharField(label='Тема', widget=forms.TextInput(attrs={'class':'form-control', "rows": 5}))
     content = forms.CharField(label='Текст', widget=forms.TextInput(attrs={'class':'form-control', "rows": 5}))
+
+class NewsForm(ModelForm):
+    class Meta:
+        model = News
+        fields = ('title', 'post','image', 'date',)
+        widgets = {
+            'date': DateInput,
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+        }

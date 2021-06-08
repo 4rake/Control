@@ -19,6 +19,7 @@
     <br>
     <a class="btn btn-primary" href="{% url 'create_attendance' %}">Добавить данные</a> <a href="{% url 'export_excel-attendance' %}" class="btn btn-primary">Excel</a>
     <hr>
+<div class="table-responsive">
 <table class="table table-striped">
 <tr>
     <th>Студент</th>
@@ -39,4 +40,5 @@
         </tr>
         {% endfor %}
     </table>
+</div>
             {% endblock content %}

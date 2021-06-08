@@ -68,10 +68,9 @@ class UserProfile(models.Model):
         verbose_name_plural = 'Сотрудники'
 
 
-
 class Student(models.Model):
     """Студенты"""
-    #user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(verbose_name="Имя", max_length=50)
     surname = models.CharField(verbose_name="Фамилия", max_length=50)
     middle_name = models.CharField(verbose_name="Отчество", max_length=50, default='Отсутсвут', null=True, blank=True)
@@ -118,13 +117,23 @@ class Distribution(models.Model):
         verbose_name_plural = "Распределения"
 
 
+presence = [
+    ("Контрольная", "Контрольная"),
+    ("Лабораторная", "Лабораторная"),
+    ("Практическая", "Практическая"),
+    ("Итоговая", "Итоговая")
+]
+
 class Homework(models.Model):
     """Информация"""
     title = models.CharField(verbose_name="Заголовок", max_length=100)
     description = models.TextField(verbose_name="Описание")
-    file = models.FileField(null=True, blank=True)
-    date_of_deliviri = models.DateTimeField(verbose_name="Дата назначения работы")#, auto_now_add=True
+    presence = models.CharField(max_length=20, choices=presence, verbose_name="Приоритет важности работы")
+    file = models.FileField(null=True, blank=True, verbose_name='')
+    date_of_deliviri = models.DateTimeField(verbose_name="Дата назначения работы")
     appointment_date = models.DateTimeField(verbose_name="Дата сдачи работы")
+
+    fk_employee = models.ForeignKey(UserProfile, verbose_name="Преподаватель", on_delete=models.PROTECT)
     fk_group = models.ManyToManyField('Group_name', verbose_name="Группа")
 
     def __str__(self):
@@ -133,6 +142,15 @@ class Homework(models.Model):
     class Meta:
         verbose_name = "Домашняя работа"
         verbose_name_plural = "Домашняя работа"
+
+    def get_absolute_url(self):
+        return reverse("homework_url", kwargs={"homework_id": self.pk})
+
+    def get_update_url(self):
+        return reverse("update_homework_url", kwargs={"homework_id": self.pk})
+
+    def get_delete_url(self):
+        return reverse("delete_homework_url", kwargs={"homework_id": self.pk})
 
 
 class Homework_check(models.Model):
@@ -144,6 +162,9 @@ class Homework_check(models.Model):
 
     def __str__(self):
         return self.assessment
+
+    def get_absolute_url(self):
+        return reverse('update_homework_check', kwargs={'pk':self.pk})
 
     class Meta:
         verbose_name = "Проверка домашней работы"
@@ -174,7 +195,7 @@ class Attendance(models.Model):
     fk_student = models.ManyToManyField(Student, verbose_name="Студент")
     fk_discipline = models.ForeignKey(Discipline, verbose_name="Дисциплина", on_delete=models.PROTECT)
     date_of_visit = models.DateTimeField(verbose_name="Дата проведения занятия")
-    presence = models.CharField(max_length=12, choices=presence, verbose_name="Присутсвие на занятии")
+    presence = models.CharField(max_length=20,choices=presence, verbose_name="Присутсвие на занятии")
 
     #def __str__(self):
     #    return self.fk_student
@@ -182,3 +203,20 @@ class Attendance(models.Model):
     class Meta:
         verbose_name = "Посещаемость"
         verbose_name_plural = "Посещаемость"
+
+
+class News(models.Model):
+    title = models.CharField(verbose_name="Заголовок", max_length=120)
+    post = models.TextField(verbose_name="Пост")
+    image = models.ImageField(max_length=100, verbose_name='Изображение', upload_to='img', blank=True, null=True)
+    date = models.DateTimeField(verbose_name="Дата публикации")
+
+    class Meta:
+        verbose_name = 'Статья'
+        verbose_name_plural = 'Статьи'
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('post', kwargs={'pk': self.pk})

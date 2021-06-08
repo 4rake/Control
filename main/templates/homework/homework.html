@@ -1,37 +1,39 @@
 {% extends 'main/layout.html' %}
-
-
-
 {% block content %}
     <h1>Домашняя работа</h1>
     <hr>
     <a class="btn btn-primary" href="{% url 'create_homework' %}">Добавить данные</a>
     <br>
     <br>
+<div class="table-responsive">
+
 <table class="table table-striped">
 <tr>
-     <th>Заголовок</th>
-    <th>Описание работы</th>
-    <th>Файл</th>
-    <th>Дата назначения работы</th>
-    <th>Дата сдачи работы</th>
-    <th>Группа</th>
-    <th>Изменение данных</th>
-    <th>Удаление данных</th>
-
-</tr>
-        {% for homework in homework %}
-        <tr>
-        <td>{{ homework.title }}</td>
-        <td>{{ homework.description }}</td>
-        <td>{{ homework.file }}
-        <td>{{ homework.date_of_deliviri }}</td>
-        <td>{{ homework.appointment_date }}</td>
-        <td>{{ homework.fk_group.all|join:", "  }}</td>
-        <td><a href="{% url 'update_homework' homework.id %}">Изменить</a> </td>
-        <td><a href="{% url 'delete_homework' homework.id %}">Удалить</a> </td>
-
-        </tr>
-        {% endfor %}
-    </table>
+         <th>Заголовок</th>
+        <th>Описание работы</th>
+        <th>Важность работы</th>
+        <th>Файл</th>
+        <th>Дата назначения работы</th>
+        <th>Дата сдачи работы</th>
+        <th>Преподаватель</th>
+        <th>Группа</th>
+        <th>Изменение данных</th>
+        <th>Удаление данных</th>
+    </tr>
+            {% for homework in homework %}
+            <tr>
+            <td>{{ homework.title }}</td>
+            <td>{{ homework.description }}</td>
+            <td>{{ homework.presence }}</td>
+            <td>{{ homework.file }}</td>
+            <td>{{ homework.date_of_deliviri }}</td>
+            <td>{{ homework.appointment_date }}</td>
+            <td>{{ homework.fk_employee.user.userprofile}}</td>
+            <td>{{ homework.fk_group.all|join:", "  }}</td>
+            <td><a href="{% url 'update_homework' homework.id %}">Изменить</a> </td>
+           <td><a href="{% url 'delete_homework' homework.id %}">Удалить</a> </td>
+            </tr>
+            {% endfor %}
+        </table>
+             </div>
             {% endblock content %}

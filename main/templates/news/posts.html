@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+    <h1>Новостной портал</h1>
+    <hr>
+    <a class="btn btn-primary" href="{% url 'create_posts' %}">Добавить данные</a>
+    <br>
+    <br>
+<div class="table-responsive">
+<table class="table table-striped">
+<tr>
+    <th>Заголовок</th>
+    <th>Пост</th>
+    <th>Изображение</th>
+    <th>Дата публикации</th>
+    <th>Изменение данных</th>
+    <th>Удаление данных</th>
+
+</tr>
+{% for news in news %}
+    </tr>
+<!--<a href="/news/{{news.id}}"><h3>{{news.title}}</h3></a>-->
+<!--<h5>{{news.image}}</h5>-->
+<!--<h5>{{news.date|date:"Y-m-d в H:i:s"}}</h5>-->
+<!-- <a href="{{news.get_absolute_url}}">Link</a>-->
+        <td>{{ news.title }}</td>
+        <td>{{ news.post }}</td>
+        <td>{{ news.image }}</td>
+        <td>{{ news.date }}
+        <td><a href="{% url 'update_posts' news.id %}">Изменить</a> </td>
+        <td><a href="{% url 'delete_posts' news.id %}">Удалить</a> </td>
+  </tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock content %}

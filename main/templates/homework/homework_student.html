@@ -1,0 +1,41 @@
+{% extends 'main/layout.html' %}
+{% block content %}
+{% for homework in homework %}
+<div class="card text-center">
+  <div class="card-header">
+        <h5 class="card-text">Название домашней работы</h5>
+    <h6 class="card-text">{{homework.title}}</h6>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Преподаватель</h5>
+    <h6>
+    {{ homework.fk_employee.user.userprofile.surname }}
+    {{ homework.fk_employee.user.userprofile.name }}
+    {{ homework.fk_employee.user.userprofile.middle_name }}</h6>
+     <h5 class="control-label">Группа(ы)</h5>
+      <h6>{{homework.fk_group.all|join:", "  }}</h6>
+      <h5 class="control-label">Практический материал</h5>
+      <h6>{{homework.file}}</h6>
+  </div>
+  <div class="card-footer text-muted">
+  <h5 class="card-text">Дата назначения работы</h5>
+<h6>{{homework.date_of_deliviri|date:"d-m-Y"}}</h6>
+    <h5 class="card-text">Дата сдачи работы</h5>
+    <h6>{{homework.appointment_date|date:"d-m-Y"}}</h6>
+  </div>
+</div>
+<!--    <lable class="control-label">Преподаватель</lable>-->
+<!--<h6>{{ homework.fk_employee.user.userprofile}}</h6>-->
+<!--    <lable class="control-label">Название работы</lable>-->
+<!--    <a href="/homework/{{homework.id}}"><h3>{{homework.title}}</h3></a>-->
+<!--        <lable class="control-label">Описание</lable>-->
+<!--    <h6>{{homework.description}}</h6>-->
+<!--    <lable class="control-label">Дата назначения работы</lable>-->
+<!--<h6>{{homework.date_of_deliviri|date:"d-m-Y"}}</h6>-->
+<!--    <lable class="control-label">Дата сдачи работы</lable>-->
+<!--    <h6>{{homework.appointment_date|date:"d-m-Y"}}</h6>-->
+<!--        <lable class="control-label">Группа(ы)</lable>-->
+<!--        <h6>{{homework.fk_group.all|join:", "  }}</h6>-->
+<!-- <a href="{{news.get_absolute_url}}">Link</a>-->
+{% endfor %}
+{% endblock content %}
